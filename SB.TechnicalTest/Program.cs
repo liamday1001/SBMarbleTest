@@ -53,12 +53,39 @@ namespace SB.TechnicalTest
         }
 
         /// <summary>
-        /// Second attempt - you do this one!
+        /// Second attempt - binary search
         /// </summary>
         /// <returns>Highest safe floor.</returns>
         static int Attempt2()
         {
-            return 0;
+            // Perform a binary search to home in on the solution faster
+            int failure = Building.NumberFloors;
+            int success = 0;
+            int attempt = failure;
+
+            // Keep going until we find the failure boundry, the point at which one floor higher means the marble breaks.
+            while (failure - success > 1)
+            {
+                bool attemptResult = false;
+                attemptResult = Building.DropMarble(attempt);
+
+                if (attemptResult)
+                {
+                    // The marble didn't break
+                    success = attempt;
+                    // Move the next attempt higher
+                    attempt = (attempt + failure) / 2;
+                }
+                else
+                {
+                    // The marble broke
+                    failure = attempt;
+                    // Move the next attempt lower
+                    attempt = (attempt - success) / 2;
+                }
+            };
+
+            return success;
         }
     }
 }
